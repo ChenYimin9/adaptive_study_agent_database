@@ -1,6 +1,27 @@
+# 服务器端配置（[mysqld] 段，影响 MySQL 服务运行）
 [mysqld]
-# Needed for compatibility with existing SQL clients / WordPress.
+# 兼容旧版客户端（如项目依赖的 mysqlclient）
 default-authentication-plugin=mysql_native_password
-
-# Listen on all interfaces
+# 允许所有网络接口访问（容器环境必需）
 bind-address=0.0.0.0
+# 字符集配置（支持中文、emoji等学习内容）
+character-set-server=utf8mb4
+collation-server=utf8mb4_unicode_ci
+init-connect='SET NAMES utf8mb4'
+
+# 客户端配置（[mysql] 段，影响 mysql 命令行客户端）
+[mysql]
+# 默认登录账号（与项目数据库账号一致）
+user=root
+# 默认登录密码（注意：生产环境建议用环境变量，此处仅为开发测试）
+password=123456
+# 客户端字符集（与服务器端一致）
+default-character-set=utf8mb4
+
+# 备份工具配置（[mysqldump] 段，影响备份脚本）
+[mysqldump]
+# 备份时使用的账号密码（与上面保持一致，避免备份脚本手动传参）
+user=root
+password=123456
+# 备份文件字符集
+default-character-set=utf8mb4
