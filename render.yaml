@@ -1,24 +1,23 @@
 services:
-- type: pserv
-  name: mysql
-  plan: standard
-  env: docker
-  autoDeploy: false
-  disk:
-    name: mysql
-    mountPath: /var/lib/mysql
-    sizeGB: 10
-  envVars:
-  - fromGroup: mysql
-
-envVarGroups:
-- name: mysql
-  envVars:
-  - key: MYSQL_DATABASE
-    value: mysql
-  - key: MYSQL_USER
-    value: mysql
-  - key: MYSQL_PASSWORD
-    generateValue: true
-  - key: MYSQL_ROOT_PASSWORD
-    generateValue: true
+  - type: pserv  # 私有服务类型，适合数据库（仅内部访问）
+    name: adaptive-study-db  # 服务名称，更贴合项目
+    plan: standard
+    env: docker
+    autodeploy: false  # 关闭自动部署，避免误操作
+    disk:
+      name: adaptive-study-db-data  # 磁盘名称，区分其他服务
+      mountPath: /var/lib/mysql  # MySQL 数据存储路径
+      sizeGB: 10  # 存储大小，可根据数据量调整
+    envVars:
+      - fromGroup: mysql  # 关联环境变量组
+    envVarGroups:
+      - name: mysql
+        envVars:
+          - key: MYSQL_DATABASE
+            value: adaptive_study_db  # 项目核心数据库名
+          - key: MYSQL_USER
+            value: root  # 项目数据库账号
+          - key: MYSQL_PASSWORD
+            value: 123456  # 项目数据库密码（开发环境用，生产需替换）
+          - key: MYSQL_ROOT_PASSWORD
+            value: 123456  # root 密码，与项目保持一致
